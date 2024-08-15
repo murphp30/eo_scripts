@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import contextily as cx
+# import contextily as cx
 import geojson
 # import geopandas as gpd
 import matplotlib.pyplot as plt
@@ -63,20 +63,20 @@ with rio.open(context_tif, "r+") as modis_rgb:
 # hacky way to get a white background
 modis_masked[modis_masked == -999] = 255
 
-west, south, east, north = malawi_poly.bounds
-provider = cx.providers.CartoDB.Voyager
-malawi_img, malawi_ext = cx.bounds2img(
-    west,
-    south,
-    east,
-    north,
-    ll=True,
-    source=provider,
-    zoom=8
-)
-# print(cx.tile._calculate_zoom(west, south, east, north))
+# west, south, east, north = malawi_poly.bounds
+# provider = cx.providers.CartoDB.Voyager
+# malawi_img, malawi_ext = cx.bounds2img(
+#     west,
+#     south,
+#     east,
+#     north,
+#     ll=True,
+#     source=provider,
+#     zoom=8
+# )
+# # print(cx.tile._calculate_zoom(west, south, east, north))
 # print(malawi_ext)
-warped_img, warped_ext = cx.warp_tiles(malawi_img, malawi_ext, "EPSG:4326")
+# warped_img, warped_ext = cx.warp_tiles(malawi_img, malawi_ext, "EPSG:4326")
 # f, ax = plt.subplots(1, figsize=(9, 9))
 # ax.imshow(malawi_img, extent=malawi_ext)
 
@@ -89,7 +89,7 @@ f, ax = plt.subplots(1, figsize=(4, 7))
 #             # alpha=0.1,
 #             source=cx.providers.CartoDB.Voyager)
 show(modis_masked, ax=ax, transform=modis_transform)
-for i, footprint in enumerate(footprint_poly):
+for i, footprint in enumerate(footprint_poly.geoms):
     if i == 1:
         label = "S1A footprint"
     else:
@@ -99,7 +99,7 @@ for i, footprint in enumerate(footprint_poly):
         color='cyan',
         linewidth=2,
         label=label)
-for i, roi in enumerate(rois):
+for i, roi in enumerate(rois.geoms):
     if i == 1:
         label = "Region of interest"
     else:
@@ -120,5 +120,5 @@ plt.ylabel("Latitude")
 plt.xlim(32.5)
 plt.legend()
 plt.tight_layout()
-# plt.savefig("/data/tapas/pearse/context_figure.pdf")
+plt.savefig("/data/tapas/pearse/context_figure.pdf")
 plt.show()
