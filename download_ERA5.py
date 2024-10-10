@@ -47,7 +47,7 @@ def Get_ERA5_data(ERA5_variables:list,
         
         Downloaded_datasets = []
         
-        df = pd.date_range(start=start_datetime, end=end_datetime, freq='H').to_frame(name='Datetime')
+        df = pd.date_range(start=start_datetime, end=end_datetime, freq='h').to_frame(name='Datetime')
         
         df['year'] = df['Datetime'].dt.year
         df["year_str"] = ['{:02d}'.format(year) for year in df['year']]
@@ -131,8 +131,8 @@ if __name__ == "__main__":
     end_date = '20240531' # format is YYYYMMDD
     start_datetime = datetime.datetime.strptime('{}T000000'.format(start_date), '%Y%m%dT%H%M%S')
     end_datetime =  datetime.datetime.strptime('{}T230000'.format(end_date), '%Y%m%dT%H%M%S')
-    AOI_file = "/data/tapas/pearse/malawi/sentinel1/aoi/kasungu.geojson"
-    ERA5_dir = "/data/tapas/pearse/malawi/ERA5/kasungu"
+    AOI_file = "/data/tapas/pearse/malawi/sentinel1/aoi/southern_malawi_aoi.geojson"
+    ERA5_dir = "/data/tapas/pearse/malawi/ERA5/liwonde/"
     (bbox_cdsapi,
      year_requests,
      month_requests,
@@ -153,6 +153,6 @@ if __name__ == "__main__":
                                                 hours_requests,
                                                 export_filenames))
     # Downloaded_datasets.append(last_day_dataset)
-    ds = xr.open_mfdataset(Downloaded_datasets, combine='by_coords')
-    ERA5_sm_filename = "/data/tapas/pearse/malawi/ERA5/kasungu/kasungu_20230101_20240531.nc"
+    ds = xr.open_mfdataset(Downloaded_datasets, combine='by_coords', engine="netcdf4")
+    ERA5_sm_filename = ERA5_dir+"liwond_"+start_date+"_"+end_date+".nc"
     ds.to_netcdf(ERA5_sm_filename) # Export netcdf file

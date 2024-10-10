@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-# import contextily as cx
+import contextily as cx
 import geojson
 # import geopandas as gpd
 import matplotlib.pyplot as plt
-# import numpy as np
+import numpy as np
 import rasterio as rio
 import rioxarray as rxr
 
@@ -62,27 +62,37 @@ with rio.open(context_tif, "r+") as modis_rgb:
     modis_crs = modis_rgb.crs
 # hacky way to get a white background
 modis_masked[modis_masked == -999] = 255
-
-# west, south, east, north = malawi_poly.bounds
-# provider = cx.providers.CartoDB.Voyager
-# malawi_img, malawi_ext = cx.bounds2img(
-#     west,
-#     south,
-#     east,
-#     north,
-#     ll=True,
-#     source=provider,
-#     zoom=8
-# )
+modis_masked = np.ma.masked_equal(modis_masked, 255)
+"""
+gamma correction, basically just skimage.exposure.adjust_gamma
+but I don't want to install skimage just for that.
+"""
+gain = 1
+gamma = 0.75
+gamma_lookup_table = 255 * gain * (np.linspace(0, 1, 256) ** gamma)
+gamma_lookup_table = np.minimum(np.rint(gamma_lookup_table), 255).astype('uint8')
+# concatenate mask to make (M,N,4) array for proper mask of RGB plot
+modis_masked = np.concatenate([gamma_lookup_table[modis_masked.data], 255*~modis_masked.mask[np.newaxis, 0]], axis=0)
+west, south, east, north = malawi_poly.bounds
+provider = cx.providers.CartoDB.Voyager
+malawi_img, malawi_ext = cx.bounds2img(
+    west,
+    south,
+    east,
+    north,
+    ll=True,
+    source=provider,
+    zoom=8
+)
 # # print(cx.tile._calculate_zoom(west, south, east, north))
 # print(malawi_ext)
-# warped_img, warped_ext = cx.warp_tiles(malawi_img, malawi_ext, "EPSG:4326")
+warped_img, warped_ext = cx.warp_tiles(malawi_img, malawi_ext, "EPSG:4326")
 # f, ax = plt.subplots(1, figsize=(9, 9))
 # ax.imshow(malawi_img, extent=malawi_ext)
 
 f, ax = plt.subplots(1, figsize=(4, 7))
 
-# im = ax.imshow(warped_img, extent=warped_ext)
+im = ax.imshow(warped_img, extent=warped_ext)
 # cx.add_basemap(
 #             ax,
 #             crs=modis_crs.to_string(),
@@ -110,15 +120,14 @@ for i, roi in enumerate(rois.geoms):
         linewidth=2,
         label=label)
 # cx.add_basemap(
-
 #             ax,
-#             # crs=
-#             alpha=0.1,
+#             crs=modis_crs.to_string(),
+#             # alpha=0.1,
 #             source=provider)
 plt.xlabel("Longitude")
 plt.ylabel("Latitude")
 plt.xlim(32.5)
 plt.legend()
 plt.tight_layout()
-plt.savefig("/data/tapas/pearse/context_figure.pdf")
+plt.savefig("/data/tapas/pearse/context_figure.png")
 plt.show()

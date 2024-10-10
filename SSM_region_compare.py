@@ -158,6 +158,7 @@ def plot_region_ssm(
         cor_lags,
         ssm_cor
     )
+    print(f"Max SSM correlation {park_name}: {np.max(ssm_cor)}")
     ax_cor.set_xlabel("lag (days)")
     ax_cor.set_ylabel("correlation coefficient")
     ax[0].legend()
@@ -227,7 +228,7 @@ def plot_ssm_ndvi(
             ssm_interp/np.max(ssm_interp),
             ndvi_interp/np.max(ndvi_interp))
         cor_lags = correlation_lags(len(ssm_interp), len(ndvi_interp))
-
+        print(f"Max correlation between SSM and NDVI {sub_label} {park_name}: {np.max(ssm_ndvi_cor)}")
         ax_cor.plot(
             cor_lags,
             ssm_ndvi_cor,
@@ -296,6 +297,7 @@ def plot_region_ndvi(
         ndvi_mean_inside/np.max(ndvi_mean_inside)
         )
     cor_lags = correlation_lags(len(ndvi_mean_outside), len(ndvi_mean_inside))
+    print(f"Max NDVI correlation {park_name}: {np.max(ndvi_cor)}")
     ax_cor.plot(
         cor_lags,
         ndvi_cor
@@ -334,6 +336,6 @@ if __name__ == "__main__":
             )
         plot_region_ssm(gdf, nparks_geojson, park_name)
         plot_region_ndvi(nparks_geojson, park_name)
-        # plot_ssm_ndvi(gdf, nparks_geojson, park_name)
+        plot_ssm_ndvi(gdf, nparks_geojson, park_name)
 
-    plt.show()
+    # plt.show()
