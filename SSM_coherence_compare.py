@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+# gis environment
 import csv
 import os
 import sys
@@ -138,7 +139,7 @@ ax1[1].set_xlabel("Date", fontdict={"size": 14})
 ax1_cor[1].set_xlabel("Soil Moisture Content (%)", fontdict={"size": 14})
 
 fig.savefig(
-    f"/data/tapas/pearse/malawi/Coherence_NDVI_and_SSM_{park_name}.png")
+    f"/data/tapas/pearse/malawi/Coherence_NDVI_and_SSM_{park_name}.eps")
 fig_cor.savefig(
-    f"/data/tapas/pearse/malawi/SSM_coherence_cor_{park_name}.png")
+    f"/data/tapas/pearse/malawi/SSM_coherence_cor_{park_name}.eps")
 plt.show()

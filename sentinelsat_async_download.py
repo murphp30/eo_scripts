@@ -2,6 +2,8 @@
 """
 Find and download Sentinel-1 SLC data using Sentinel Hub Catalog API 
 https://documentation.dataspace.copernicus.eu/APIs/SentinelHub/Catalog.html
+
+I couldn't actually get this to work.
 """
 
 import argparse
