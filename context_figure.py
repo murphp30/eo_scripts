@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# tapas environment
 import contextily as cx
 import geojson
 # import geopandas as gpd
@@ -129,5 +129,5 @@ plt.ylabel("Latitude")
 plt.xlim(32.5)
 plt.legend()
 plt.tight_layout()
-plt.savefig("/data/tapas/pearse/context_figure.png")
+plt.savefig("/data/tapas/pearse/context_figure.eps")
 plt.show()

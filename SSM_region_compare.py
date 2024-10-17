@@ -84,7 +84,7 @@ def plot_region_ssm(
 
     gdf_inside, gdf_outside = get_gdf_split(gdf, nparks_geojson, park_name)
     fig, ax = plt.subplots(
-        2, 1, figsize=(9, 7), sharex=True)
+        2, 1, figsize=(9, 7), sharex=True, layout="constrained")
     fig_cor, ax_cor = plt.subplots(
         1, 1, figsize=(9, 7)
     )
@@ -114,7 +114,7 @@ def plot_region_ssm(
             + " Park"
             )
 
-        ax[0].set_ylabel("Soil Moisture Level (percent)")
+        ax[0].set_ylabel("Soil Moisture Level (percent)",fontdict={"size": 14})
         sentinel1_revist = (df_datetimes - df_datetimes[0]).days
         moisture_rate = np.gradient(SSM_mean, sentinel1_revist)
         drying_inds = moisture_rate <= 0
@@ -145,8 +145,9 @@ def plot_region_ssm(
             + park_name.capitalize()
             + " Park"
         )
-        ax[1].set_xlabel("Date")
-        ax[1].set_ylabel("Soil moisture rate (pecent per day)")
+        ax[1].set_xlabel("Date",fontdict={"size": 14})
+        ax[1].set_ylabel("Soil moisture rate (pecent per day)",fontdict={"size": 14})
+
     SSM_mean_outside = gdf_outside.mean(numeric_only=True)
     SSM_mean_inside = gdf_inside.mean(numeric_only=True)
     ssm_cor = correlate(
@@ -167,8 +168,8 @@ def plot_region_ssm(
         Line2D([0], [0], marker='v', label='Decreasing Moisture')
     ]
     ax[1].legend(handles=ax1_legend_elements)
-    fig.savefig(f"/data/tapas/pearse/malawi/SSM_{park_name}.png")
-    fig_cor.savefig(f"/data/tapas/pearse/malawi/SSM_correlation_{park_name}.png")
+    fig.savefig(f"/data/tapas/pearse/malawi/SSM_{park_name}.eps")
+    fig_cor.savefig(f"/data/tapas/pearse/malawi/SSM_correlation_{park_name}.eps")
     return
 
 

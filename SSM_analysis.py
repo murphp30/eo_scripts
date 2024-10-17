@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# insar4sm_dev environment
 from datetime import datetime, timedelta
 from pathlib import Path
 import sys
@@ -146,7 +146,7 @@ else:
 ax1.tick_params(labelsize=14)
 ax2.tick_params(labelsize=14)
 plt.tight_layout()
-plt.savefig(ssm_path/"soil_moisture_inversion_vs_hourly_cumulative_precipitation")
+plt.savefig(ssm_path/"soil_moisture_inversion_vs_hourly_cumulative_precipitation.eps")
 
 # liwonde_geojson = \
 #     "/data/tapas/pearse/malawi/sentinel1/aoi/Liwonde_National_Park.geojson"
@@ -155,7 +155,7 @@ plt.savefig(ssm_path/"soil_moisture_inversion_vs_hourly_cumulative_precipitation
 # liwonde_poly = Polygon(
 #     liwonde_poly['features'][0]['geometry']['coordinates'][0])
 n_plots = len(gdf.columns[1:])
-plot = False
+plot = True
 scaler = 2
 if plot:
     cmap = cmocean.cm.rain #cm.get_cmap('viridis')
@@ -207,7 +207,7 @@ if plot:
         cb = fig.colorbar(im, ax=axs[:,-1], aspect=50)
         cb.set_label(label="Soil Moisture Level (%)", size=14)
         # plt.tight_layout()
-        plt.savefig(ssm_path/"soil_moisture_pngs/all_date_compare")
+        plt.savefig(ssm_path/"soil_moisture_pngs/all_date_compare.eps")
         # plt.show()
     else:
         for col in gdf.columns[1:]:
@@ -230,7 +230,7 @@ if plot:
                 source=cx.providers.CartoDB.Voyager(attribution=""))
             ax.plot(*npark.geoms[0].exterior.xy, color='r')
             # plt.tight_layout()
-            plt.savefig(ssm_path/f"soil_moisture_pngs/{col}.png")
+            plt.savefig(ssm_path/f"soil_moisture_pngs/{col}.eps")
             plt.close()
 
 
@@ -247,7 +247,7 @@ running_difference_dict = {col_name: value for col_name, value in zip(
 running_difference_df = pd.DataFrame(running_difference_dict)
 running_difference_gdf = gpd.GeoDataFrame(pd.concat([gdf['geometry'].reset_index(drop=True), running_difference_df], axis=1))
 n_running_difference_plots = len(running_difference_gdf.columns[1:])
-plot = False
+# plot = False
 if plot:
     cmap = cm.get_cmap('PuOr')
     normalizer = Normalize(-50, 50)
@@ -303,7 +303,7 @@ if plot:
         plt.savefig(
             ssm_path/"running_difference_pngs/running_difference_compare.pdf")
         plt.savefig(
-            ssm_path/"running_difference_pngs/running_difference_compare.png")
+            ssm_path/"running_difference_pngs/running_difference_compare.eps")
         # plt.show()
     else:
         for col in running_difference_gdf.columns[1:]:
@@ -325,7 +325,7 @@ if plot:
                 source=cx.providers.CartoDB.Voyager(attribution=""))
             ax.plot(*npark.geoms[0].exterior.xy, color='r')
             # plt.tight_layout()
-            plt.savefig(ssm_path/f"running_difference_pngs/{col}.png")
+            plt.savefig(ssm_path/f"running_difference_pngs/{col}.eps")
             plt.close()
 
     fig, ax = plt.subplots(figsize=(width_onecol, width_onecol/golden), layout='constrained')
@@ -355,7 +355,7 @@ if plot:
     ax.axvspan(rainy_start2, rainy_end2, color="aqua", label="Approximate Rainy season")
     ax.set_xlim(datetime(2022,12,15))
     ax.legend()
-    plt.savefig(ssm_path/"mean_running_diff.png")
+    plt.savefig(ssm_path/"mean_running_diff.eps")
 
 if park_name == "kasungu":
     year_on_year = gdf[gdf.columns[30:-1]].values - gdf[gdf.columns[1:12]].values
@@ -370,7 +370,7 @@ year_on_year_dict = {col_name: value for col_name, value in zip(
 year_on_year_df = pd.DataFrame(year_on_year_dict)
 year_on_year_gdf = gpd.GeoDataFrame(pd.concat([gdf['geometry'].reset_index(drop=True), year_on_year_df], axis=1))
 
-plot = True
+# plot = True
 scaler =3
 if plot:
     print("Plotting year on year")
@@ -423,7 +423,7 @@ if plot:
         cbar = fig.colorbar(im, ax=axs.ravel().tolist(), aspect=50)
         cbar.set_label(label="Percentage Point difference", size=14)
 
-        plt.savefig(ssm_path/"year_on_year_pngs/year_on_year_compare.png")
+        plt.savefig(ssm_path/"year_on_year_pngs/year_on_year_compare.eps")
 
     else:
         for col in year_on_year_gdf.columns[1:]:
@@ -445,7 +445,7 @@ if plot:
                 crs=gdf.crs.to_string(),
                 source=cx.providers.CartoDB.Voyager)
             plt.tight_layout()
-            plt.savefig(ssm_path/f"year_on_year_pngs/{col}.png")
+            plt.savefig(ssm_path/f"year_on_year_pngs/{col}.eps")
             plt.close()
 
 

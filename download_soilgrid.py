@@ -26,5 +26,6 @@ def get_soil_layers(poly, out_dir, res=250):
 if __name__ == "__main__":
     poly = geojson_to_shapely("/data/tapas/pearse/vietnam/aoi/F56_bbox.geojson")
     out_dir = "/data/tapas/pearse/vietnam/SSM/soilgrids/"
-    get_soil_layers(poly, out_dir, 250)
+    resolution = 250 #metres
+    get_soil_layers(poly, out_dir, resolution)
     print("BYE!")
