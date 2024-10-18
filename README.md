@@ -19,7 +19,7 @@ Note: the alluringly named `sentinelsat_async_download.py` doesn't actually work
 
 - Set up account on https://cds.climate.copernicus.eu.
 - Create .cdsapirc file as described in https://cds.climate.copernicus.eu/how-to-api.
-- Edit `/data/tapas/pearse/download_ERA5.py` with appropriate start date, end date and area of interest and run to download and combine ERA5 dataset.
+- Edit `/data/tapas/pearse/download_ERA5.py` with appropriate start date, end date, and area of interest geojson file and run to download and combine ERA5 dataset.
 
 ### Soilgrids
 - Edit `download_soilgrid.py` to include the location of your area of interest geojson, output directory, and desired resolution.

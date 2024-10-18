@@ -11,7 +11,14 @@ from rasterstats import zonal_stats
 from shapely.geometry import MultiPolygon, Polygon
 
 
-def geojson_to_shapely(gj_file, i=0):
+def geojson_to_shapely(gj_file: Union[str, Path],
+                       i: int = 0) -> Union[MultiPolygon, Polygon]:
+    """
+    Take a geojson file and convert it to a shapely Polygon or MultiPolygon.
+    arguments: 
+            gj_file = the location of the geojson file
+            i = index of Polygon if gj_file is MultiPolygon
+    """
     with open(gj_file) as gj:
         poly_coords = geojson.load(gj)
     # try account for multipolygon
@@ -33,6 +40,9 @@ def load_ssm(
         shp_file: Union[str, Path],
         polygon_geojson: Union[str, Path]
         ) -> gpd.GeoDataFrame:
+    """
+    Shortcut to load in soil moisture results
+    """
     gdf = gpd.read_file(shp_file)
     polys = gpd.read_file(polygon_geojson)
     gdf = gdf.drop(columns="geometry")
@@ -45,7 +55,9 @@ def get_zonal_means(
         bbox: Union[Polygon, MultiPolygon],
         npark: Union[Polygon, MultiPolygon],
         ):
-
+    """
+    Get mean inside and outside the national park
+    """
     inside_park = bbox & npark
     outside_park = bbox ^ inside_park
     zone_means = {"inside": 0, "outside": 0}
